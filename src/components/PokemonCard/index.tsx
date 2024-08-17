@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Pokeball from '@/components/Pokeball'
+import { Pokeball } from '@/components'
 import usePokemonCard, { PokemonProps } from './usePokemonCard'
 import {
   Container,
@@ -9,9 +9,7 @@ import {
   PokemonType,
 } from './styles'
 
-type Props = { name: string, url: string }
-
-export default function CardPokemon ({ name, url }: Props) {
+export default function CardPokemon ({ url }: { url: string }) {
   const [pokemon, setPokemon] = useState({} as PokemonProps)
 
   usePokemonCard(url, setPokemon)
@@ -20,7 +18,7 @@ export default function CardPokemon ({ name, url }: Props) {
     <Container color={pokemon.backgroundColor}>
       <Pokemon>
         <PokemonNumber>#{pokemon.id}</PokemonNumber>
-        <PokemonName>{name}</PokemonName>
+        <PokemonName>{pokemon.name}</PokemonName>
         {pokemon.types && (
           <div>
             {pokemon.types.map(pokemonType => (

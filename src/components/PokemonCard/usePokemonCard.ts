@@ -10,6 +10,7 @@ type PokemonTypesProps = {
 
 export type PokemonProps = {
   id: number
+  name: string
   image: string
   types: PokemonTypesProps[]
   backgroundColor: string
@@ -17,6 +18,7 @@ export type PokemonProps = {
 
 type Response = {
   id: number
+  name: string
   types: {
     type: { name: string }
   }[]
@@ -32,12 +34,16 @@ export default function usePokemonCard (url: string, setPokemon: (pokemon: Pokem
   
   useEffect(() => {
     api.get(url).then(response => {
-      const { id, types, sprites } = response.data as Response
+      const { id, name, types, sprites } = response.data as Response
       
-      const mainType = types.find(x => x.type.name !== 'normal')!.type.name
+      const mainType = (
+        types.find(x => x.type.name !== 'normal')
+        || types[0]
+      ).type.name
 
       setPokemon({
         id,
+        name,
         backgroundColor: colors.backgroundType[mainType],
         image: sprites.other['official-artwork'].front_default,
         types: types.map(({ type: { name } }) => ({

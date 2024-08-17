@@ -42,6 +42,7 @@ export const Container = styled.li<BoxProps>`
 `
 
 export const Pokemon = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: stretch;
