@@ -3,7 +3,6 @@ import media from 'styled-media-query'
 
 export const PokemonsGrid = styled.ul`
   padding: 0;
-  list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 60px;

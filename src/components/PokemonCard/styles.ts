@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-interface BoxProps {
-  color: string;
+type BoxProps = {
+  color: string
 }
 
 export const Container = styled.li<BoxProps>`
@@ -71,7 +71,7 @@ export const PokemonNumber = styled.span`
   font-size: 20px;
   font-weight: bold;
   letter-spacing: 2px;
-  color: ${({ theme }) => theme.colors.text.number}99;
+  color: ${({ theme }) => theme.colors.text.black}99;
 `
 
 export const PokemonName = styled.span`

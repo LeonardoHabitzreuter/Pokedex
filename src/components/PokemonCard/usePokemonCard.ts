@@ -1,52 +1,26 @@
 import api from '@/utils/api'
-import { useEffect } from 'react'
+import { PokemonProps, PokemonResponse } from '@/utils/types/Pokemon'
+import { useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 
-type PokemonTypesProps = {
-  name: string
-  color: string
-  icon: string
-}
-
-export type PokemonProps = {
-  id: number
-  name: string
-  image: string
-  types: PokemonTypesProps[]
-  backgroundColor: string
-}
-
-type Response = {
-  id: number
-  name: string
-  types: {
-    type: { name: string }
-  }[]
-  sprites: {
-    other: {
-      'official-artwork': { front_default: string }
-    }
-  }
-}
-
-export default function usePokemonCard (url: string, setPokemon: (pokemon: PokemonProps) => void) {
+export default function usePokemonCard (url: string) {
+  const [pokemon, setPokemon] = useState({} as PokemonProps)
   const { colors } = useTheme()
   
   useEffect(() => {
     api.get(url).then(response => {
-      const { id, name, types, sprites } = response.data as Response
+      const pokemon = response.data as PokemonResponse
       
       const mainType = (
-        types.find(x => x.type.name !== 'normal')
-        || types[0]
+        pokemon.types.find(x => x.type.name !== 'normal')
+        || pokemon.types[0]
       ).type.name
 
       setPokemon({
-        id,
-        name,
+        ...pokemon,
         backgroundColor: colors.backgroundType[mainType],
-        image: sprites.other['official-artwork'].front_default,
-        types: types.map(({ type: { name } }) => ({
+        image: pokemon.sprites.other['official-artwork'].front_default,
+        types: pokemon.types.map(({ type: { name } }) => ({
           name: name,
           icon: name,
           color: colors.type[name],
@@ -54,4 +28,6 @@ export default function usePokemonCard (url: string, setPokemon: (pokemon: Pokem
       })
     })
   }, [url, colors, setPokemon])
+
+  return pokemon
 }

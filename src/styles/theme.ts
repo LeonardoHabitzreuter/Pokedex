@@ -45,16 +45,18 @@ const defaultTheme: DefaultTheme = {
       water: '#58ABF6',
     },
     background: {
+      gray: '#f5f5f5',
+      success: '#62B957',
       white: '#FFFFFF',
       input: '#F2F2F2',
       pressedInput: '#E2E2E2',
       modal: '#000000',
     },
     text: {
+      success: '#62B957',
       white: '#FFFFFF',
       black: '#17171B',
       gray: '#747476',
-      number: '#17171B',
     },
     height: {
       short: '#FFC5E6',

@@ -1,3 +1,5 @@
 export { default as Pokeball } from './ui/Pokeball'
 export { default as PokemonCard } from './PokemonCard'
+export { default as PokemonModal } from './PokemonModal'
 export { default as InfiniteScroll } from './InfiniteScroll'
+export { default as Modal } from './ui/Modal'
