@@ -1,13 +1,12 @@
 import styled from 'styled-components'
 
-type BoxProps = {
+type WithColor = {
   color: string
 }
 
-export const Container = styled.li<BoxProps>`
+export const Container = styled.li<WithColor & { $hide: boolean }>`
+  display: ${({ $hide }) => $hide ? 'none' : 'flex'};
   position: relative;
-
-  display: flex;
   height: 180px;
   width: inherit;
 
@@ -82,7 +81,7 @@ export const PokemonName = styled.span`
   color: ${({ theme }) => theme.colors.text.white};
 `
 
-export const PokemonType = styled.div<BoxProps>`
+export const PokemonType = styled.div<WithColor>`
   display: flex;
   flex-direction: row;
   align-items: center;

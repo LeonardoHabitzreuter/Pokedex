@@ -28,7 +28,9 @@ export default function PokemonModal ({ pokemon, handleClose }: Props) {
             <Relative>
               <CustomTitle as="h2">{pokemon.name}</CustomTitle>
 
-              <Img width='96px' height='96px' src={pokemon.image} alt={pokemon.name} />
+              {pokemon.image && (
+                <Img width='96px' height='96px' src={pokemon.image} alt={pokemon.name} />
+              )}
 
               <CustomSubTitle $white as="h3">
                 Abilities

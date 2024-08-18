@@ -23,9 +23,10 @@ export default function PokemonsList () {
 
       <InfiniteScroll loadMore={displayMorePokemons}>
         <PokemonsGrid>
-          {pokemonsToDisplay.map(({ url }) => (
+          {pokemonsToDisplay.map(({ hide, name, url }) => (
             <PokemonCard
-              key={url}
+              hide={hide}
+              key={name}
               url={url}
               onClick={setPokemonSelected}
             />

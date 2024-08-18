@@ -10,15 +10,16 @@ import {
 } from './styles'
 
 type Props = {
+  hide: boolean
   url: string
   onClick: (pokemon: PokemonProps) => void
 }
 
-export default function CardPokemon ({ url, onClick }: Props) {
+export default function CardPokemon ({ url, onClick, hide }: Props) {
   const pokemon = usePokemonCard(url)
 
   return (
-    <Container color={pokemon.backgroundColor} onClick={() => onClick(pokemon)}>
+    <Container $hide={hide} color={pokemon.backgroundColor} onClick={() => onClick(pokemon)}>
       <Pokemon>
         <PokemonNumber>#{pokemon.id}</PokemonNumber>
         <PokemonName>{pokemon.name}</PokemonName>
