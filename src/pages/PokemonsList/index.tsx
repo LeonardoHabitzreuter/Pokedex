@@ -1,24 +1,29 @@
 import Text from '@mui/material/Typography'
 import usePokemonsList from './usePokemonsList'
-import { PokemonsGrid } from './styles'
-import { PokemonCard, InfiniteScroll, PokemonModal } from '@/components'
-import { PokemonProps } from '@/utils/types/Pokemon'
 import { useState } from 'react'
+import { PokemonsGrid } from './styles'
+import { PokemonProps } from '@/utils/types/Pokemon'
+import { PokemonCard, InfiniteScroll, PokemonModal, SearchInput } from '@/components'
 
 export default function PokemonsList () {
   const [pokemonSelected, setPokemonSelected] = useState<PokemonProps | null>(null)
-  const { loadMorePokemons, allPokemons, pokemonsURLs } = usePokemonsList()
+  const {
+    searchParam,
+    setSearchParam,
+    displayMorePokemons,
+    pokemonsToDisplay
+  } = usePokemonsList()
   
   return (
     <section>
       <PokemonModal pokemon={pokemonSelected} handleClose={() => setPokemonSelected(null)} />
       <Text variant='h2' fontWeight={700}>Pokedex</Text>
 
-      <div style={{ height: '100px' }}></div>
+      <SearchInput value={searchParam} onChange={setSearchParam} placeholder='Search pokemons by name' />
 
-      <InfiniteScroll loadMore={() => loadMorePokemons(allPokemons)}>
+      <InfiniteScroll loadMore={displayMorePokemons}>
         <PokemonsGrid>
-          {pokemonsURLs.map(({ url }) => (
+          {pokemonsToDisplay.map(({ url }) => (
             <PokemonCard
               key={url}
               url={url}

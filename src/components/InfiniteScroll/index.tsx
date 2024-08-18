@@ -14,7 +14,7 @@ export default function InfiniteScroll({
     <>
       {children}
       <div style={{ marginTop: '12rem' }}>
-        <ReactWaypoint onEnter={loadMore} />
+        <ReactWaypoint onEnter={() => loadMore()} />
       </div>
     </>
   )

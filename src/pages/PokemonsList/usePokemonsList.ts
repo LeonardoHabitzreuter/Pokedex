@@ -9,26 +9,27 @@ type Pokemon = {
 const ITEMS_PER_SCROLL = 9
 
 export default function usePokemonsList () {
-  const [allPokemons, setAllPokemons] = useState<Pokemon[]>([])
+  const [searchParam, setSearchParam] = useState('')
   const [pokemonsURLs, setPokemonsURLs] = useState<Pokemon[]>([])
+  const [pokemonsToDisplay, setPokemonsToDisplay] = useState<Pokemon[]>([])
   const [page, setPage] = useState(0)
 
-  const loadMorePokemons = useCallback((pokemons: Pokemon[]) => {
-    setPokemonsURLs(pokemons.slice(0, (page + 1) * ITEMS_PER_SCROLL))
+  const displayMorePokemons = useCallback((pokemons: Pokemon[] = pokemonsURLs) => {
+    setPokemonsToDisplay(pokemons.slice(0, (page + 1) * ITEMS_PER_SCROLL))
     setPage(page + 1)
-  }, [setPokemonsURLs, page, setPage])
+  }, [pokemonsURLs, setPokemonsToDisplay, page, setPage])
 
   useEffect(() => {
     api
       .get('/pokemon', { params: { limit: 1300 }})
       .then(({ data }) => {
         const allPokemons = (data.results as Pokemon[])
-        setAllPokemons(allPokemons)
-        loadMorePokemons(allPokemons)
+        setPokemonsURLs(allPokemons)
+        displayMorePokemons(allPokemons)
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
-  return { loadMorePokemons, allPokemons, pokemonsURLs }
+  return { displayMorePokemons, pokemonsToDisplay, searchParam, setSearchParam }
 }
