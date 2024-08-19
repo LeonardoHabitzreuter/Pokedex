@@ -1,6 +1,8 @@
 import { PokemonProps } from '@/utils/types/Pokemon'
 import { Modal } from '@/components'
 import { formatTextToCapitalizeWithTrace, sumBy } from '@/utils/format'
+import { collectPokemon, dropPokemon, getPokemonCollection } from '@/utils/storage'
+import { useEffect, useState } from 'react'
 import {
   Container,
   List,
@@ -14,8 +16,6 @@ import {
   Relative,
   CatchButton
 } from './styles'
-import { collectPokemon, dropPokemon, getPokemonCollection } from '@/utils/storage'
-import { useEffect, useState } from 'react'
 
 type Props = {
   pokemon: PokemonProps | null
