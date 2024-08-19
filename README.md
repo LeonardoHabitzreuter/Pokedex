@@ -8,6 +8,7 @@
 - [Styled Components](https://styled-components.com/)
 - [Vite](https://vitejs.dev/)
 - [Material UI](https://mui.com/)
+- [Zustand](https://github.com/pmndrs/zustand)
 
 ## Getting Started
 
