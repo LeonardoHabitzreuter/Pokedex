@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { Typography, Grid } from '@mui/material'
+import { Typography, Grid, Button } from '@mui/material'
 
 type WithColor = {
   color: string
@@ -108,6 +108,10 @@ export const ListAbilities = styled.ul<WithColor>`
     border-radius: 5px;
     text-align: center;
   }
+`
+
+export const CatchButton = styled(Button)<{ bgColor: string }>`
+  background-color: ${(props) => props.bgColor}!important;
 `
 
 export const Img = styled.img`

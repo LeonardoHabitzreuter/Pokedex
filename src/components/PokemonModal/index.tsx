@@ -11,8 +11,11 @@ import {
   Right,
   CustomSubTitle,
   Img,
-  Relative
+  Relative,
+  CatchButton
 } from './styles'
+import { collectPokemon, dropPokemon, getPokemonCollection } from '@/utils/storage'
+import { useEffect, useState } from 'react'
 
 type Props = {
   pokemon: PokemonProps | null
@@ -20,6 +23,24 @@ type Props = {
 }
 
 export default function PokemonModal ({ pokemon, handleClose }: Props) {
+  const [isInCollection, setIsInCollection] = useState(false)
+
+  useEffect(() => {
+    getPokemonCollection().then(collection => {
+      setIsInCollection(collection.includes(pokemon?.name || ''))
+    })
+  }, [pokemon])
+
+  const changeCollectStatus = () => {
+    if (isInCollection) {
+      dropPokemon(pokemon!.name)
+    } else {
+      collectPokemon(pokemon!.name)
+    }
+
+    setIsInCollection(!isInCollection)
+  }
+
   return (
     <Modal open={!!pokemon} handleClose={handleClose}>
       {pokemon && (
@@ -42,6 +63,15 @@ export default function PokemonModal ({ pokemon, handleClose }: Props) {
                   </li>
                 ))}
               </ListAbilities>
+              <CatchButton
+                onClick={changeCollectStatus}
+                fullWidth
+                size='large'
+                variant='contained'
+                bgColor={pokemon.types[0].color}
+              >
+                {isInCollection ? 'Drop' : 'Catch'} {pokemon.name}
+              </CatchButton>
             </Relative>
           </Left>
 
