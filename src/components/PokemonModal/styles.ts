@@ -110,8 +110,8 @@ export const ListAbilities = styled.ul<WithColor>`
   }
 `
 
-export const CatchButton = styled(Button)<{ bgColor: string }>`
-  background-color: ${(props) => props.bgColor}!important;
+export const CatchButton = styled(Button)<{ $bgColor: string }>`
+  background-color: ${(props) => props.$bgColor}!important;
 `
 
 export const Img = styled.img`

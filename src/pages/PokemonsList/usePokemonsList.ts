@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import api from '@/utils/api'
-import { getPokemonCollection } from '@/utils/storage'
+import useStore from '@/utils/store'
 
 type Pokemon = {
   hide: boolean
@@ -14,40 +14,39 @@ export default function usePokemonsList () {
   const [onlyCollection, setOnlyCollection] = useState(false)
   const [searchParam, setSearchParam] = useState('')
   const [pokemonsURLs, setPokemonsURLs] = useState<Pokemon[]>([])
-  const [pokemonsToDisplay, setPokemonsToDisplay] = useState<Pokemon[]>([])
   const [page, setPage] = useState(0)
+  
+  const { pokemonsCollection } = useStore()
 
-  const displayMorePokemons = useCallback((pokemons: Pokemon[] = pokemonsURLs) => {
-    if (searchParam.length >= 3) return
+  const displayMorePokemons = useCallback(() => {
+    if (onlyCollection || searchParam.length >= 3) return
 
-    setPokemonsToDisplay(pokemons.slice(0, (page + 1) * ITEMS_PER_SCROLL))
     setPage(page + 1)
-  }, [searchParam, pokemonsURLs, setPokemonsToDisplay, page, setPage])
+  }, [onlyCollection, searchParam, page, setPage])
 
-  useEffect(() => {
-    getPokemonCollection().then(collection => {
-      const currentPokemons = pokemonsURLs
-        .slice(0, page * ITEMS_PER_SCROLL)
-        .map(x => ({
-          ...x,
-          hide: onlyCollection && !collection.includes(x.name)
-        }))
-      
-      if (searchParam.length < 3) {
-        setPokemonsToDisplay(currentPokemons)
-      } else {
-        setPokemonsToDisplay([
-          ...currentPokemons.map(x => ({ ...x, hide: x.hide || !x.name.includes(searchParam) })),
-          ...pokemonsURLs
-            .filter(x => !currentPokemons.some(y => y.name === x.name) && x.name.includes(searchParam))
-            .map(x => ({
-              ...x,
-              hide: onlyCollection && !collection.includes(x.name)
-            }))
-        ])
-      }
-    })
-  }, [setPokemonsToDisplay, pokemonsURLs, searchParam, page, onlyCollection])
+  const pokemonsList = useMemo(() => {
+    // Using hide prop to avoid re-rendering the same PokemonCard over and over again
+    const currentPokemons = pokemonsURLs
+      .slice(0, page * ITEMS_PER_SCROLL)
+      .map(x => ({
+        ...x,
+        hide: onlyCollection && !pokemonsCollection.includes(x.name)
+      }))
+    
+    if (searchParam.length < 3) {
+      return currentPokemons
+    } else {
+      return [
+        ...currentPokemons.map(x => ({ ...x, hide: x.hide || !x.name.includes(searchParam) })),
+        ...pokemonsURLs
+          .filter(x => !currentPokemons.some(y => y.name === x.name) && x.name.includes(searchParam))
+          .map(x => ({
+            ...x,
+            hide: onlyCollection && !pokemonsCollection.includes(x.name)
+          }))
+      ]
+    }
+  }, [pokemonsURLs, searchParam, page, onlyCollection, pokemonsCollection])
 
   useEffect(() => {
     api
@@ -55,7 +54,7 @@ export default function usePokemonsList () {
       .then(({ data }) => {
         const allPokemons = (data.results as Pokemon[]).map(x => ({ ...x, hide: false }))
         setPokemonsURLs(allPokemons)
-        displayMorePokemons(allPokemons)
+        displayMorePokemons()
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -63,7 +62,7 @@ export default function usePokemonsList () {
 
   return {
     displayMorePokemons,
-    pokemonsToDisplay,
+    pokemonsList,
     searchParam,
     setSearchParam,
     onlyCollection,

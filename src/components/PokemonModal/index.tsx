@@ -1,8 +1,7 @@
 import { PokemonProps } from '@/utils/types/Pokemon'
 import { Modal } from '@/components'
 import { formatTextToCapitalizeWithTrace, sumBy } from '@/utils/format'
-import { collectPokemon, dropPokemon, getPokemonCollection } from '@/utils/storage'
-import { useEffect, useState } from 'react'
+import usePokemonModal from './usePokemonModal'
 import {
   Container,
   List,
@@ -23,23 +22,7 @@ type Props = {
 }
 
 export default function PokemonModal ({ pokemon, handleClose }: Props) {
-  const [isInCollection, setIsInCollection] = useState(false)
-
-  useEffect(() => {
-    getPokemonCollection().then(collection => {
-      setIsInCollection(collection.includes(pokemon?.name || ''))
-    })
-  }, [pokemon])
-
-  const changeCollectStatus = () => {
-    if (isInCollection) {
-      dropPokemon(pokemon!.name)
-    } else {
-      collectPokemon(pokemon!.name)
-    }
-
-    setIsInCollection(!isInCollection)
-  }
+  const { changeCollectStatus, isInCollection } = usePokemonModal(pokemon)
 
   return (
     <Modal open={!!pokemon} handleClose={handleClose}>
@@ -68,7 +51,7 @@ export default function PokemonModal ({ pokemon, handleClose }: Props) {
                 fullWidth
                 size='large'
                 variant='contained'
-                bgColor={pokemon.types[0].color}
+                $bgColor={pokemon.types[0].color}
               >
                 {isInCollection ? 'Drop' : 'Catch'} {pokemon.name}
               </CatchButton>

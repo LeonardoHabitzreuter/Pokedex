@@ -12,7 +12,7 @@ export default function PokemonsList () {
     searchParam,
     setSearchParam,
     displayMorePokemons,
-    pokemonsToDisplay,
+    pokemonsList,
     onlyCollection,
     setOnlyCollection
   } = usePokemonsList()
@@ -40,7 +40,7 @@ export default function PokemonsList () {
 
       <InfiniteScroll loadMore={displayMorePokemons}>
         <PokemonsGrid>
-          {pokemonsToDisplay.map(({ hide, name, url }) => (
+          {pokemonsList.map(({ hide, name, url }) => (
             <PokemonCard
               hide={hide}
               key={name}
